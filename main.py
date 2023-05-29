@@ -3,7 +3,7 @@ main.py is the executable for the game, run this to play the game!
 """
 # - Module imports for the game
 import pygame
-from assets import Window, test_environment
+from assets import Window, test_environment, test_loop
 
 # - Initialise modules
 pygame.font.init()
@@ -16,7 +16,7 @@ OPENGL_FLAGS = 1073741824 | 1
 
 # - Set attributes for the 'Window' class
 window_attributes = {
-    "dimensions": [1280, 720],
+    "dimensions": [1280, 960],
     "fullscreen": False,
     "renderer": RENDER,
     "running": True,
@@ -25,7 +25,7 @@ window_attributes = {
     "flags": OPENGL_FLAGS if RENDER == "OpenGL" else SDL_FLAGS,
     "clock": pygame.time.Clock(),
     "vsync": False,
-    "loop": "window test",
+    "loop": "test loop",
     "tick": "NA",
     "path": "assets/original/",
     "fps": 60
@@ -39,6 +39,8 @@ game.set_game_surface("Window test")
 if __name__ == "__main__":
     while game.running:
         match game.loop:
+            case "test loop":
+                test_loop(game)
             case "window test":
                 test_environment(game)
             case "restart":

@@ -10,6 +10,8 @@ from .modules import Window
 from .scripts import Cube
 from .scripts import Player
 from .scripts import Gui
+from .scripts import Grunt
 
 # - Game loops
 from .loops import test_environment
+from .loops import test_loop
