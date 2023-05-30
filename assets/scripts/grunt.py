@@ -20,7 +20,7 @@ class Grunt(pygame.sprite.Sprite):
         self.half_screen_height = game.height / 2
 
         self.x_coord = 50
-        self.y_coord = 50
+        self.y_coord = 300
         self.z_coord = 0
 
     def update(self, game):
@@ -29,7 +29,7 @@ class Grunt(pygame.sprite.Sprite):
         # TODO: KEEP THE SQUARE CENTRAL UNTIL IT REACHES SCREEN HEIGHT
 
         # - Have the grunt move toward the screen width centre
-        if self.x_coord + self.x_coord / 2 < self.half_screen_width:
+        if self.x_coord < self.half_screen_width - self.width / 2:
             match self.movement:
                 case "walking":
                     self.x_coord += self.walk_speed * game.delta_time
@@ -38,7 +38,7 @@ class Grunt(pygame.sprite.Sprite):
                 case "running":
                     self.x_coord += self.run_speed * game.delta_time
 
-        if self.y_coord + self.y_coord / 2 < self.half_screen_height:
+        if self.y_coord < self.half_screen_height - self.height / 2:
             match self.movement:
                 case "walking":
                     self.y_coord += self.walk_speed * game.delta_time
@@ -46,6 +46,12 @@ class Grunt(pygame.sprite.Sprite):
                     self.y_coord += self.jog_speed * game.delta_time
                 case "running":
                     self.y_coord += self.run_speed * game.delta_time
+
+        if self.x_coord > self.half_screen_width - self.width / 2:
+            self.x_coord = self.half_screen_width - self.width / 2
+
+        if self.y_coord > self.half_screen_height - self.height / 2:
+            self.y_coord = self.half_screen_height - self.height / 2
 
         # - Have the grunt increase in size to give the illusion of getting closer
         if self.height < game.height:
