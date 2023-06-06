@@ -18,6 +18,7 @@ def test_loop(game):
         # - Events
         for event in pygame.event.get():
             game.events(event)
+            grunt.events(event)
 
         # - Logic
         grunt.update(game)
