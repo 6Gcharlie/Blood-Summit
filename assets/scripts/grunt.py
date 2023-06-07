@@ -5,10 +5,6 @@ Grunt.py contains details of the grunt enemy.
 import random
 import pygame
 
-# TODO: REFACTOR THE CODE SO THAT "self.speed" IS USED INSTEAD OF OTHER SET SPEEDS
-#       - This will significantly reduce calculation time
-#       - And will also allow for the speed to be affected and reset easily
-
 # TODO: CREATE A FUNCTION FOR RESETTING/RESPAWNING THE ENEMY
 #       - Maybe add an attribute which dictates whether it can respawn?
 
@@ -22,9 +18,6 @@ import pygame
 #       - Shield/Armour variable? Is armour localised to a body part? How many hits does the armour take?
 #       - Respawn/reposition without dying variable? How many times can it do that?
 
-# TODO: FIX MAKING THE GRUNT MOVE FASTER THE BIGGER IT IS
-#       - Try using "z_coord" to track when is a good time to increase the speed?
-
 # TODO: MAKE THE GRUNT MOVE MORE TOWARD THE CENTRE OF THE SCREEN
 
 class Grunt(pygame.sprite.Sprite):
@@ -35,11 +28,11 @@ class Grunt(pygame.sprite.Sprite):
         self.set_surface()
 
         self.flying = True
-        self.movement = "walking"
-        self.walk_speed = 20
-        self.jog_speed = 40
-        self.run_speed = 80
-        self.speed = 0
+        self.running = True
+        self.jog_speed = 0
+        self.run_speed = 120
+
+        self.speed = self.run_speed if self.running else self.jog_speed
 
         self.half_screen_width = game.width / 2
         self.half_screen_height = game.height / 2
@@ -66,77 +59,29 @@ class Grunt(pygame.sprite.Sprite):
 
                 self.x_coord = random.randint(0, screen_width - self.width)
                 self.y_coord = random.randint(0, screen_height - self.height)
-                self.walk_speed = 20
-                self.jog_speed = 40
-                self.run_speed = 80
                 self.z_coord = 0
-                print("clicked")
+                self.speed = self.run_speed if self.running else self.jog_speed
 
     def update(self, game):
         "update script for the enemy"
-        # - Have the grunt move toward the screen width centre
-        if self.x_coord <= self.half_screen_width - self.width / 2:
-            match self.movement:
-                case "walking":
-                    self.x_coord += self.walk_speed * game.delta_time
-                case "jogging":
-                    self.x_coord += self.jog_speed * game.delta_time
-                case "running":
-                    self.x_coord += self.run_speed * game.delta_time
+        # - Have the grunt move toward the centre of the screen, if it is smaller than the screen
+        if self.height < game.height and self.width < game.width:
+            self.speed += (self.width / 2) * game.delta_time
 
-        if self.x_coord >= self.half_screen_width - self.width / 2:
-            match self.movement:
-                case "walking":
-                    self.x_coord -= self.walk_speed * 2 * game.delta_time
-                case "jogging":
-                    self.x_coord -= self.jog_speed * 2 * game.delta_time
-                case "running":
-                    self.x_coord -= self.run_speed * 2 * game.delta_time
+            if self.x_coord <= self.half_screen_width - self.width / 2:
+                self.x_coord += self.speed * game.delta_time
+            if self.x_coord >= self.half_screen_width - self.width / 2:
+                self.x_coord -= (self.speed * 2) * game.delta_time
+            if self.y_coord <= self.half_screen_height - self.height / 2:
+                self.y_coord += self.speed * game.delta_time
+            if self.y_coord >= self.half_screen_height - self.height / 2:
+                self.y_coord -= (self.speed * 2) * game.delta_time
 
-        if self.y_coord <= self.half_screen_height - self.height / 2:
-            match self.movement:
-                case "walking":
-                    self.y_coord += self.walk_speed * game.delta_time
-                case "jogging":
-                    self.y_coord += self.jog_speed * game.delta_time
-                case "running":
-                    self.y_coord += self.run_speed * game.delta_time
-
-        if self.y_coord >= self.half_screen_height - self.height / 2:
-            match self.movement:
-                case "walking":
-                    self.y_coord -= self.walk_speed * 2 * game.delta_time
-                case "jogging":
-                    self.y_coord -= self.jog_speed * 2 * game.delta_time
-                case "running":
-                    self.y_coord -= self.run_speed * 2 * game.delta_time
-
-        # - Have the grunt increase in size to give the illusion of getting closer
+        # - Have the grunt increase in size until it fits the screen
         if self.height < game.height:
-            match self.movement:
-                case "walking":
-                    self.height += self.walk_speed * game.delta_time
-                case "jogging":
-                    self.height += self.jog_speed * game.delta_time
-                case "running":
-                    self.height += self.run_speed * game.delta_time
-
+            self.height += self.speed * game.delta_time
         if self.width < game.height:
-            match self.movement:
-                case "walking":
-                    self.width += self.walk_speed * game.delta_time
-                case "jogging":
-                    self.width += self.jog_speed * game.delta_time
-                case "running":
-                    self.width += self.run_speed * game.delta_time
-
-        match self.movement:
-            case "walking":
-                self.walk_speed += 1
-            case "jogging":
-                self.jog_speed += 1
-            case "running":
-                self.run_speed += 1
+            self.width += self.speed * game.delta_time
 
         self.set_surface()
 
