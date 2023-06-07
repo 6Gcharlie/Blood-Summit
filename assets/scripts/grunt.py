@@ -2,43 +2,40 @@
 Grunt.py contains details of the grunt enemy.
 """
 
+import os
 import random
 import pygame
-
-# TODO: ADD ADDITIONAL ATTRIBUTES
-#       - Is the enemy flying?
-#       - Is the enemy ground borne?
-#       - Can the enemy take flight and land?
-#       - Can the enemy dodge? Does it have a dodge limit? Dodge response time? Dodge delay time?
-#       - How angry is the enemy? Does this increase HP? Dodge? Dodge response time? Speed? Behavior? Damage?
-#       - HP
-#       - Shield/Armour variable? Is armour localised to a body part? How many hits does the armour take?
-#       - Respawn/reposition without dying variable? How many times can it do that?
-
-# TODO: MAKE THE GRUNT MOVE MORE TOWARD THE CENTRE OF THE SCREEN
 
 class Grunt(pygame.sprite.Sprite):
     "The grunt is an enemy that deals melee damage to the enemy by reaching them"
     def __init__(self, game):
-        self.width = 50
-        self.height = 50
-        self.set_surface()
-
+        self.hitpoints = 100
         self.dead = False
-        self.lives = 2
+        self.angry = False
+        self.lives = 99
         self.flying = True
         self.running = True
         self.jog_speed = 0
         self.run_speed = 120
 
-        self.speed = self.run_speed if self.running else self.jog_speed
+        self.dodges = False
+        self.dodge_count = 0
+        self.dodge_reaction_time = 10
+        self.dodge_distance = 0
+        self.dodge_end_lag = 10
+
+        self.armour = {
+            "head": {"armoured": False, "hitpoints": 100, "threshold": 40},
+            "body": {"armoured": False, "hitpoints": 100, "threshold": 40}
+        }
+
+        self.peter = pygame.image.load(os.path.join("assets/sprites/mystery_figure.png")).convert_alpha()
 
         self.half_screen_width = game.width / 2
         self.half_screen_height = game.height / 2
 
-        self.x_coord = random.randint(0, self.half_screen_width * 2)
-        self.y_coord = random.randint(0, self.half_screen_height * 2)
-        self.z_coord = 50
+        self.spawn()
+        self.set_surface()
 
     def events(self, event):
         "temnp"
@@ -51,7 +48,7 @@ class Grunt(pygame.sprite.Sprite):
 
             if bullet_x and bullet_y:
                 if self.lives > 0:
-                    self.respawn()
+                    self.spawn()
                     self.lives -= 1
                 else:
                     self.dead = True
@@ -78,6 +75,8 @@ class Grunt(pygame.sprite.Sprite):
             if self.width < game.height:
                 self.width += self.speed * game.delta_time
 
+            self.peter = pygame.image.load(os.path.join("assets/sprites/mystery_figure.png")).convert_alpha()
+            self.peter = pygame.transform.scale(self.peter, [self.width, self.height])
             self.set_surface()
 
     def draw(self, surface):
@@ -86,13 +85,20 @@ class Grunt(pygame.sprite.Sprite):
 
     def set_surface(self):
         "Set the size of the grunt surface"
-        self.image = pygame.Surface([self.width, self.height])
-        self.image.fill([255, 0, 0])
+        self.image = pygame.Surface([self.width, self.height], 65536, 32)
+        self.image = self.image.convert_alpha()
+        self.image.blit(self.peter, [0, 0, self.width, self.height])
 
-    def respawn(self):
+    def spawn(self):
         "Allows the grunt to respawn on the screen"
+        self.z_coord = random.randint(10, 100)
         self.width = self.z_coord
         self.height = self.z_coord
-        self.x_coord = random.randint(0, (self.half_screen_width * 2) - self.width)
-        self.y_coord = random.randint(0, (self.half_screen_height * 2) - self.height)
         self.speed = self.run_speed if self.running else self.jog_speed
+
+        if self.flying:
+            self.x_coord = random.randint(0, (self.half_screen_width * 2) - self.width)
+            self.y_coord = random.randint(0, self.half_screen_height - self.height)
+        else:
+            self.x_coord = random.randint(0, (self.half_screen_width * 2) - self.width)
+            self.y_coord = self.half_screen_height - (self.height / 2)
