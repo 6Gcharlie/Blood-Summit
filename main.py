@@ -3,7 +3,7 @@ main.py is the executable for the game, run this to play the game!
 """
 # - Module imports for the game
 import pygame
-from assets import Window, test_environment, test_loop
+from assets import Window, test_loop
 
 # - Initialise modules
 pygame.font.init()
@@ -41,9 +41,7 @@ if __name__ == "__main__":
         match game.loop:
             case "test loop":
                 test_loop(game)
-            case "window test":
-                test_environment(game)
             case "restart":
-                game.set_loop("window test")
+                game.set_loop("test loop")
 
     pygame.display.quit()
