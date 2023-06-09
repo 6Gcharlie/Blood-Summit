@@ -13,8 +13,8 @@ class Grunt(pygame.sprite.Sprite):
         self.dead = False
         self.angry = False
         self.lives = 99
-        self.flying = True
-        self.running = True
+        self.flying = False
+        self.running = False
         self.jog_speed = 0
         self.run_speed = 120
 
