@@ -5,12 +5,12 @@ after being clicked!
 """
 
 import pygame
-from assets import Grunt
+from assets import Enemy
 
 def test_loop(game):
     "The test loop itself"
     game.get_prev_time()
-    grunt = Grunt(game)
+    enemy = Enemy(game)
     shooting = False
     timer = 0
 
@@ -52,10 +52,10 @@ def test_loop(game):
                 shooting = True
 
             game.events(event)
-            grunt.events(event)
+            enemy.events(event)
 
         # - Logic
-        grunt.update(game)
+        enemy.update(game)
         if shooting:
             if timer >= 10:
                 shooting = False
@@ -69,7 +69,7 @@ def test_loop(game):
             game.surface, [80, 80, 80], [0, game.height / 2, game.width, game.height / 2]
         )
         game.surface.blit(foreground, [0, game.height / 2])
-        grunt.draw(game.surface)
+        enemy.draw(game.surface)
 
         if shooting:
             game.surface.fill([155, 155, 155])
