@@ -92,7 +92,7 @@ class Enemy(pygame.sprite.Sprite):
         if not self.dead:
             if self.height < game.height and self.width < game.width:
                 # - Let's make the enemy move faster based on width
-                self.speed += (self.width / 2) * game.delta_time
+                self.speed += (self.width / 4) * game.delta_time
 
                 # - If we're not in the centre of the screen, move toward it
                 if self.x_coord <= self.half_screen_width - self.width / 2:
