@@ -17,7 +17,6 @@ class Enemy(pygame.sprite.Sprite):
     # object        game        The game parameter stores all attributes about the game
     def __init__(self, game):
         "Construct the class with the attributes given"
-        
         # - Basic attributes for the enemy
         self.hitpoints = 100
         self.flying = False
