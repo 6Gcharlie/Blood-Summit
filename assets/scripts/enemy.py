@@ -56,7 +56,7 @@ class Enemy(pygame.sprite.Sprite):
         self.half_screen_height = game.height / 2
 
         # - Lets draw our enemy to the screen & spawn them
-        self.set_width_and_height()
+        self.reset_size()
         self.set_surface()
         self.spawn()
 
@@ -100,9 +100,9 @@ class Enemy(pygame.sprite.Sprite):
                 if self.x_coord >= self.half_screen_width - self.width / 2:
                     self.x_coord -= (self.speed * 2) * game.delta_time
                 if self.y_coord <= self.half_screen_height - self.height / 2:
-                    self.y_coord += self.speed * game.delta_time
+                    self.y_coord += (self.speed / 2) * game.delta_time
                 if self.y_coord >= self.half_screen_height - self.height / 2:
-                    self.y_coord -= (self.speed * 2) * game.delta_time
+                    self.y_coord -= self.speed * game.delta_time
 
             # - Have the Enemy increase in size until it fits the screen
             if self.height < game.height:
@@ -125,9 +125,8 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
-    # TODO: GIVE THIS A BETTER NAME
     # This method is used to set the width and the height of the surface
-    def set_width_and_height(self):
+    def reset_size(self):
         "temp"
         self.z_coord = random.randint(10, 100)
         self.width = self.z_coord
@@ -151,7 +150,7 @@ class Enemy(pygame.sprite.Sprite):
     #
     def spawn(self):
         "Allows the Enemy to respawn on the screen"
-        self.set_width_and_height()
+        self.reset_size()
         self.speed = self.run_speed if self.running else self.jog_speed
 
         if self.flying:
