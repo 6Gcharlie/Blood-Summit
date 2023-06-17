@@ -8,6 +8,7 @@ from .modules import Window
 
 # - Asset scripts
 from .scripts import Enemy
+from .scripts import Player
 
 # - Game loops
 from .loops import test_loop
