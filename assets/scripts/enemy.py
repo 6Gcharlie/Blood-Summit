@@ -26,6 +26,7 @@ class Enemy(pygame.sprite.Sprite):
         self.dead = False
         self.angry = False
         self.running = False
+        self.damaging = False
 
         # - Can the enemy dodge? If so, how far, how fast, how many times?
         self.dodges = False
@@ -64,10 +65,10 @@ class Enemy(pygame.sprite.Sprite):
 
     # The events method captures and manages all event for the enemy
     # object        event           The event object stores all event related information
-    def events(self, event):
+    def events(self, event, player):
         "All enemy events are captured and managed in this method"
         # - pygame.MOUSEBUTTONDOWN is event number 1025
-        if event.type == 1025:
+        if event.type == 1025 and player.rounds > 0 and event.button == 1:
             click_x, click_y = event.pos # - Get the position of the click
 
             # - Now let's work out of the bullet hit us
@@ -107,8 +108,13 @@ class Enemy(pygame.sprite.Sprite):
             # - Have the Enemy increase in size until it fits the screen
             if self.height < game.height:
                 self.height += self.speed * game.delta_time
+            else:
+                self.damaging = True
+
             if self.width < game.height:
                 self.width += self.speed * game.delta_time
+            else:
+                self.damaging = True
 
             # - Resize the image to fit the bigger surface
             self.image = pygame.image.load(os.path.join(self.url)).convert_alpha()
