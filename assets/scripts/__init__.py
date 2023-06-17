@@ -1,4 +1,4 @@
 """
 Temporary placeholder
 """
-from .grunt import Grunt
+from .enemy import Enemy

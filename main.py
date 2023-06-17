@@ -25,7 +25,7 @@ window_attributes = {
     "flags": OPENGL_FLAGS if RENDER == "OpenGL" else SDL_FLAGS,
     "clock": pygame.time.Clock(),
     "vsync": False,
-    "loop": "test loop",
+    "loop": "test environment",
     "tick": "NA",
     "path": "assets/original/",
     "fps": 60
@@ -33,15 +33,13 @@ window_attributes = {
 
 # - Create game object
 game = Window(window_attributes, False, False)
-game.set_game_surface("Window test")
+game.set_game_surface("Blood Summit")
 
 # - Main window loop
 if __name__ == "__main__":
     while game.running:
         match game.loop:
-            case "test loop":
+            case "test environment":
                 test_loop(game)
-            case "restart":
-                game.set_loop("test loop")
 
     pygame.display.quit()
