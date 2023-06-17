@@ -58,6 +58,7 @@ class Enemy(pygame.sprite.Sprite):
 
         # - Lets draw our enemy to the screen & spawn them
         self.reset_size()
+        self.image = pygame.transform.scale(self.image, [self.width, self.height])
         self.set_surface()
         self.spawn()
 
@@ -78,6 +79,7 @@ class Enemy(pygame.sprite.Sprite):
             # - If the bullet hit, die or respawn
             if bullet_x and bullet_y:
                 if self.lives > 1:
+                    self.reset_size()
                     self.spawn()
                     self.lives -= 1
                 else:
@@ -156,7 +158,6 @@ class Enemy(pygame.sprite.Sprite):
     #
     def spawn(self):
         "Allows the Enemy to respawn on the screen"
-        self.reset_size()
         self.speed = self.run_speed if self.running else self.jog_speed
 
         if self.flying:
