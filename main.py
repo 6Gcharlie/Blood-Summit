@@ -16,7 +16,7 @@ OPENGL_FLAGS = 1073741824 | 1
 
 # - Set attributes for the 'Window' class
 window_attributes = {
-    "dimensions": [1280, 960],
+    "dimensions": [1280, 720],
     "fullscreen": False,
     "renderer": RENDER,
     "running": True,
