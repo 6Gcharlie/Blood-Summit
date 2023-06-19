@@ -20,7 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         # - Basic attributes for the enemy
         self.hitpoints = 100
         self.flying = False
-        self.lives = 10
+        self.lives = 99
         self.jog_speed = 0
         self.run_speed = 120
         self.dead = False
@@ -107,16 +107,17 @@ class Enemy(pygame.sprite.Sprite):
                 if self.y_coord >= self.half_screen_height - self.height / 2:
                     self.y_coord -= self.speed * game.delta_time
 
-            # - Have the Enemy increase in size until it fits the screen
-            if self.height < game.height:
-                self.height += self.speed * game.delta_time
-            else:
-                self.damaging = True
+                # - Have the Enemy increase in size until it fits the screen
+            if self.y_coord + self.height < (game.height / 2) + 100 or self.x_coord > game.width / 4:
+                if self.height < game.height:
+                    self.height += self.speed * game.delta_time
+                else:
+                    self.damaging = True
 
-            if self.width < game.height:
-                self.width += self.speed * game.delta_time
-            else:
-                self.damaging = True
+                if self.width < game.height:
+                    self.width += self.speed * game.delta_time
+                else:
+                    self.damaging = True
 
             # - Resize the image to fit the bigger surface
             self.image = pygame.image.load(os.path.join(self.url)).convert_alpha()
@@ -129,6 +130,7 @@ class Enemy(pygame.sprite.Sprite):
     # object        surface         The surface we're going to draw the enemy onto
     def draw(self, surface):
         "Draw the Enemy onto the screen using the built in attributes"
+        pygame.draw.rect(self.surface, [255, 255, 255], [0, self.height - 5, 5, 5])
         surface.blit(self.surface, [self.x_coord, self.y_coord])
 
 
@@ -137,7 +139,7 @@ class Enemy(pygame.sprite.Sprite):
     def reset_size(self):
         "temp"
         self.z_coord = random.randint(10, 100)
-        self.width = self.z_coord
+        self.width = self.z_coord / 2
         self.height = self.z_coord
 
 

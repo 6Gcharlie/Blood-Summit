@@ -46,6 +46,7 @@ def test_loop(game):
         # - Draw
         game.surface.fill(sky_colour)
         pygame.draw.rect(game.surface, floor_colour, [0, half_height, game.width, half_height])
+        pygame.draw.rect(game.surface, [255, 255, 255], [0, half_height + 100, game.width / 4, 50])
         enemy.draw(game.surface)
         if running:
             game.surface.blit(ammo, [10, 10])
