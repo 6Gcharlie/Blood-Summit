@@ -25,7 +25,7 @@ class Enemy(pygame.sprite.Sprite):
         self.run_speed = 120
         self.dead = False
         self.angry = False
-        self.running = False
+        self.running = True
         self.damaging = False
 
         # - Can the enemy dodge? If so, how far, how fast, how many times?
@@ -103,18 +103,18 @@ class Enemy(pygame.sprite.Sprite):
                 if self.x_coord >= self.half_screen_width - self.width / 2:
                     self.x_coord -= (self.speed * 2) * game.delta_time
                 if self.y_coord <= self.half_screen_height - self.height / 2:
-                    self.y_coord += (self.speed / 2) * game.delta_time
+                    self.y_coord += self.speed * game.delta_time
                 if self.y_coord >= self.half_screen_height - self.height / 2:
                     self.y_coord -= self.speed * game.delta_time
 
                 # - Have the Enemy increase in size until it fits the screen
             if self.y_coord + self.height < (game.height / 2) + 100 or self.x_coord > game.width / 4:
                 if self.height < game.height:
-                    self.height += self.speed * game.delta_time
+                    self.height += (self.speed * 2) * game.delta_time
                 else:
                     self.damaging = True
 
-                if self.width < game.height:
+                if self.width < game.height / 2:
                     self.width += self.speed * game.delta_time
                 else:
                     self.damaging = True
@@ -138,7 +138,7 @@ class Enemy(pygame.sprite.Sprite):
     # This method is used to set the width and the height of the surface
     def reset_size(self):
         "temp"
-        self.z_coord = random.randint(10, 100)
+        self.z_coord = random.randint(60, 100)
         self.width = self.z_coord / 2
         self.height = self.z_coord
 
@@ -166,5 +166,5 @@ class Enemy(pygame.sprite.Sprite):
             self.x_coord = random.randint(0, (self.half_screen_width * 2) - self.width)
             self.y_coord = random.randint(0, self.half_screen_height - self.height)
         else:
-            self.x_coord = random.randint(0, (self.half_screen_width * 2) - self.width)
+            self.x_coord = random.randint(0, (self.half_screen_width * 2))
             self.y_coord = self.half_screen_height - (self.height / 2)
