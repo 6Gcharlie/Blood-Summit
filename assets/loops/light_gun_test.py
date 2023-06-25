@@ -21,6 +21,8 @@ def test_loop(game):
     half_height = game.height / 2
     running = False
 
+    border_size = 20
+
     shoot_to_start = font.render("Shoot to start", True, [255, 255, 255])
 
     # - This is the game loop
@@ -33,8 +35,8 @@ def test_loop(game):
                 running = True
 
             game.events(event)
-            player.events(event)
             enemy.events(event, player)
+            player.events(event)
 
         # - Logic
         if running:
@@ -48,8 +50,15 @@ def test_loop(game):
         pygame.draw.rect(game.surface, floor_colour, [0, half_height, game.width, half_height])
         pygame.draw.rect(game.surface, [255, 255, 255], [0, half_height + 100, game.width / 4, 50])
         enemy.draw(game.surface)
+
         if running:
-            game.surface.blit(ammo, [10, 10])
+            game.surface.blit(ammo, [border_size + 10, border_size + 10])
         else:
-            game.surface.blit(shoot_to_start, [10, 10])
+            game.surface.blit(shoot_to_start, [border_size + 10, border_size + 10])
+
+        pygame.draw.rect(game.surface, [255, 255, 255], [0, 0, game.width, border_size])
+        pygame.draw.rect(game.surface, [255, 255, 255], [0, 0, border_size, game.height])
+        pygame.draw.rect(game.surface, [255, 255, 255], [0, game.height - border_size, game.width, border_size])
+        pygame.draw.rect(game.surface, [255, 255, 255], [game.width - border_size, 0, border_size, game.height])
+
         game.draw()

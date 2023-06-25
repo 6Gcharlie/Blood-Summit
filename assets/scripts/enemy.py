@@ -25,7 +25,7 @@ class Enemy(pygame.sprite.Sprite):
         self.run_speed = 120
         self.dead = False
         self.angry = False
-        self.running = True
+        self.running = False
         self.damaging = False
 
         # - Can the enemy dodge? If so, how far, how fast, how many times?
