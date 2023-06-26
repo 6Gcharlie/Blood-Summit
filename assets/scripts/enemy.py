@@ -20,13 +20,14 @@ class Enemy(pygame.sprite.Sprite):
         # - Basic attributes for the enemy
         self.hitpoints = 100
         self.flying = False
-        self.lives = 99
+        self.lives = 1
         self.jog_speed = 0
         self.run_speed = 120
         self.dead = False
         self.angry = False
         self.running = False
         self.damaging = False
+        self.points = 10
 
         # - Can the enemy dodge? If so, how far, how fast, how many times?
         self.dodges = False
@@ -108,7 +109,6 @@ class Enemy(pygame.sprite.Sprite):
                     self.y_coord -= self.speed * game.delta_time
 
                 # - Have the Enemy increase in size until it fits the screen
-            if self.y_coord + self.height < (game.height / 2) + 100 or self.x_coord > game.width / 4:
                 if self.height < game.height:
                     self.height += (self.speed * 2) * game.delta_time
                 else:
@@ -118,6 +118,9 @@ class Enemy(pygame.sprite.Sprite):
                     self.width += self.speed * game.delta_time
                 else:
                     self.damaging = True
+
+                # - Set the z-coordinate for future 3D code
+                # self.z_coord = self.height / 2
 
             # - Resize the image to fit the bigger surface
             self.image = pygame.image.load(os.path.join(self.url)).convert_alpha()
@@ -137,16 +140,14 @@ class Enemy(pygame.sprite.Sprite):
 
     # This method is used to set the width and the height of the surface
     def reset_size(self):
-        "temp"
+        "Set the enemy size to be distant again"
         self.z_coord = random.randint(60, 100)
         self.width = self.z_coord / 2
         self.height = self.z_coord
 
 
 
-    #
-    #
-    #
+    # This method is used to set the enemy surface and apply the sprite to it
     def set_surface(self):
         "Set the size of the Enemy surface"
         self.surface = pygame.Surface([self.width, self.height], 65536, 32)
@@ -155,13 +156,13 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
-    #
-    #
-    #
+    # This method is used to randomly set the spawn position of the enemy
     def spawn(self):
         "Allows the Enemy to respawn on the screen"
+        # Set the enemy speed to its running or walking pace on spawn
         self.speed = self.run_speed if self.running else self.jog_speed
 
+        # Let the enemy spawn in the sky if it is flying, or on the horizon if it walks
         if self.flying:
             self.x_coord = random.randint(0, (self.half_screen_width * 2) - self.width)
             self.y_coord = random.randint(0, self.half_screen_height - self.height)

@@ -20,6 +20,9 @@ def test_loop(game):
     floor_colour = [255, 54, 89]
     half_height = game.height / 2
     running = False
+    score = 0
+    timer = 0
+    total_enemies = 20
 
     border_size = 20
 
@@ -28,6 +31,14 @@ def test_loop(game):
     # - This is the game loop
     while game.loop == "test environment":
         game.delta_clock()
+
+        # - Initial checks
+        if enemy.dead:
+            score += enemy.points
+            enemy = Enemy(game)
+            total_enemies -= 1
+
+
 
         # - Events
         for event in pygame.event.get():
@@ -38,21 +49,30 @@ def test_loop(game):
             enemy.events(event, player)
             player.events(event)
 
+
+
         # - Logic
         if running:
             enemy.update(game)
             player.update(game, enemy)
+            timer += 1 * game.delta_time
 
         ammo = font.render("Ammo: " + str(player.rounds), True, [0, 0, 0])
+        score_graphic = font.render("Score: " + str(score), True, [0, 0, 0])
+        timer_graphic = font.render("Time: " + str(timer), True, [0, 0, 0])
+
+
+
 
         # - Draw
         game.surface.fill(sky_colour)
         pygame.draw.rect(game.surface, floor_colour, [0, half_height, game.width, half_height])
-        pygame.draw.rect(game.surface, [255, 255, 255], [0, half_height + 100, game.width / 4, 50])
         enemy.draw(game.surface)
 
         if running:
-            game.surface.blit(ammo, [border_size + 10, border_size + 10])
+            game.surface.blit(timer_graphic, [border_size + 10, border_size + 10])
+            game.surface.blit(ammo, [border_size + 10, border_size + 30])
+            game.surface.blit(score_graphic, [border_size + 10, border_size + 50])
         else:
             game.surface.blit(shoot_to_start, [border_size + 10, border_size + 10])
 
