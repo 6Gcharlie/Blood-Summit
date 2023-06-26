@@ -16,19 +16,19 @@ OPENGL_FLAGS = 1073741824 | 1
 
 # - Set attributes for the 'Window' class
 window_attributes = {
-    "dimensions": [1280, 720],
-    "fullscreen": False,
-    "renderer": RENDER,
-    "running": True,
-    "paused": False,
-    "tex_id": None,
-    "flags": OPENGL_FLAGS if RENDER == "OpenGL" else SDL_FLAGS,
-    "clock": pygame.time.Clock(),
-    "vsync": False,
-    "loop": "test environment",
-    "tick": "NA",
-    "path": "assets/original/",
-    "fps": 60
+	"dimensions": [1280, 720],
+	"fullscreen": False,
+	"renderer": RENDER,
+	"running": True,
+	"paused": False,
+	"tex_id": None,
+	"flags": OPENGL_FLAGS if RENDER == "OpenGL" else SDL_FLAGS,
+	"clock": pygame.time.Clock(),
+	"vsync": False,
+	"loop": "test environment",
+	"tick": "NA",
+	"path": "assets/original/",
+	"fps": 60
 }
 
 # - Create game object
