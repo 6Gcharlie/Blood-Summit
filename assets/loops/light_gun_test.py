@@ -35,7 +35,11 @@ def test_loop(game):
         # - Initial checks
         if enemy.dead:
             score += enemy.points
-            enemy = Enemy(game)
+            if total_enemies > 0:
+                enemy = Enemy(game)
+            else:
+                running = False
+
             total_enemies -= 1
 
 
@@ -60,7 +64,6 @@ def test_loop(game):
         ammo = font.render("Ammo: " + str(player.rounds), True, [0, 0, 0])
         score_graphic = font.render("Score: " + str(score), True, [0, 0, 0])
         timer_graphic = font.render("Time: " + str(timer), True, [0, 0, 0])
-
 
 
 
