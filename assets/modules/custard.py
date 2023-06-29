@@ -72,6 +72,10 @@ class Window(pygame.sprite.Sprite):
         self.now = time.time()
         self.delta_time = self.now - self.prev_time
 
+        # - New game attributes
+        self.timer = 0
+        self.state = "pre-game"
+
 
 
     def events(self, event):
@@ -224,6 +228,15 @@ class Window(pygame.sprite.Sprite):
     def get_prev_time(self):
         "Get the current time in delta time"
         self.prev_time = time.time()
+
+
+
+    # - NEW METHODS FOR THE GAME
+
+    # - Update the timer attribute with a live time
+    def update_timer(self):
+        "Update the timer with this method"
+        self.timer += 1 * self.delta_time
 
 
 

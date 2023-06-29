@@ -19,14 +19,13 @@ def test_loop(game):
     sky_colour = [255, 100, 127]
     floor_colour = [255, 54, 89]
     half_height = game.height / 2
-    running = False
-    score = 0
-    timer = 0
     total_enemies = 20
 
     border_size = 20
 
+    # - Text prompts defined before game start
     shoot_to_start = font.render("Shoot to start", True, [255, 255, 255])
+    game_over = font.render("GAME OVER", True, [255, 0, 0])
 
     # - This is the game loop
     while game.loop == "test environment":
@@ -34,11 +33,11 @@ def test_loop(game):
 
         # - Initial checks
         if enemy.dead:
-            score += enemy.points
+            player.score += enemy.points
             if total_enemies > 0:
                 enemy = Enemy(game)
             else:
-                running = False
+                game.state = "post-game"
 
             total_enemies -= 1
 
@@ -46,24 +45,24 @@ def test_loop(game):
 
         # - Events
         for event in pygame.event.get():
-            if event.type == 1025 and event.button == 1:
-                running = True
-
-            game.events(event)
-            enemy.events(event, player)
-            player.events(event)
+            if event.type == 1025 and event.button == 1 and game.state == "pre-game":
+                game.state = "play"
+            else:
+                game.events(event)
+                enemy.events(event, player)
+                player.events(game,event)
 
 
 
         # - Logic
-        if running:
+        if game.state == "play":
             enemy.update(game)
             player.update(game, enemy)
-            timer += 1 * game.delta_time
+            game.update_timer()
 
-        ammo = font.render("Ammo: " + str(player.rounds), True, [0, 0, 0])
-        score_graphic = font.render("Score: " + str(score), True, [0, 0, 0])
-        timer_graphic = font.render("Time: " + str(timer), True, [0, 0, 0])
+            ammo = font.render("Ammo: " + str(player.rounds), True, [0, 0, 0])
+            score_graphic = font.render("Score: " + str(player.score), True, [0, 0, 0])
+            timer_graphic = font.render("Time: " + str(game.timer), True, [0, 0, 0])
 
 
 
@@ -72,12 +71,14 @@ def test_loop(game):
         pygame.draw.rect(game.surface, floor_colour, [0, half_height, game.width, half_height])
         enemy.draw(game.surface)
 
-        if running:
+        if game.state == "pre-game":
+            game.surface.blit(shoot_to_start, [border_size + 10, border_size + 10])
+        elif game.state == "play":
             game.surface.blit(timer_graphic, [border_size + 10, border_size + 10])
             game.surface.blit(ammo, [border_size + 10, border_size + 30])
             game.surface.blit(score_graphic, [border_size + 10, border_size + 50])
         else:
-            game.surface.blit(shoot_to_start, [border_size + 10, border_size + 10])
+            game.surface.blit(game_over, [border_size + 10, border_size + 10])
 
         pygame.draw.rect(game.surface, [255, 255, 255], [0, 0, game.width, border_size])
         pygame.draw.rect(game.surface, [255, 255, 255], [0, 0, border_size, game.height])

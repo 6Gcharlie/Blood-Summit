@@ -12,7 +12,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         "Constructs the class with attributes"
         self.weapon = "pistol"
-        self.lives = 3
+        self.score = 0
+        self.alive = True
         self.hitpoints = 100
         self.gunshot = pygame.mixer.Sound(os.path.join("assets/sounds/gunshot.mp3"))
         self.trigger = pygame.mixer.Sound(os.path.join("assets/sounds/trigger.mp3"))
@@ -24,23 +25,25 @@ class Player(pygame.sprite.Sprite):
     #
     #
     #
-    def events(self, event):
+    def events(self, game, event):
         "All player events are captured and managed in this method"
         # - Gun is shot
-        if event.type == 1025:
-            if event.button == 1:
-                match self.weapon:
-                    case "pistol":
-                        if self.rounds > 0:
-                            self.gunshot.play()
-                            self.rounds -= 1
-                        else:
-                            self.trigger.play()
-            elif event.button == 3:
-                match self.weapon:
-                    case "pistol":
-                        self.rounds = 17
-                        self.reload.play()
+        if game.state == "play":
+            if event.type == 1025:
+                if event.button == 1:
+                    match self.weapon:
+                        case "pistol":
+                            if self.rounds > 0:
+                                self.gunshot.play()
+                                self.rounds -= 1
+                            else:
+                                self.trigger.play()
+                    self.score -= 2
+                elif event.button == 3:
+                    match self.weapon:
+                        case "pistol":
+                            self.rounds = 17
+                            self.reload.play()
 
 
 

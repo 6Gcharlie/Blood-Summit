@@ -27,7 +27,7 @@ class Enemy(pygame.sprite.Sprite):
         self.angry = False
         self.running = False
         self.damaging = False
-        self.points = 10
+        self.points = 12
 
         # - Can the enemy dodge? If so, how far, how fast, how many times?
         self.dodges = False
@@ -133,7 +133,6 @@ class Enemy(pygame.sprite.Sprite):
     # object        surface         The surface we're going to draw the enemy onto
     def draw(self, surface):
         "Draw the Enemy onto the screen using the built in attributes"
-        pygame.draw.rect(self.surface, [255, 255, 255], [0, self.height - 5, 5, 5])
         surface.blit(self.surface, [self.x_coord, self.y_coord])
 
 
