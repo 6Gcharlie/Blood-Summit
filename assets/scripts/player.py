@@ -49,8 +49,15 @@ class Player(pygame.sprite.Sprite):
 
     #
     #
-    #
     def update(self, game, enemy):
         "Temporary placeholder"
         if enemy.damaging:
             self.hitpoints -= 100 * game.delta_time
+
+
+
+    #
+    #
+    def subtract_timer(self, timer):
+        "Temporary placeholder"
+        self.score -= timer

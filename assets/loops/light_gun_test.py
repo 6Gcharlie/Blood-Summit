@@ -19,13 +19,12 @@ def test_loop(game):
     sky_colour = [255, 100, 127]
     floor_colour = [255, 54, 89]
     half_height = game.height / 2
-    total_enemies = 20
-
+    total_enemies = 2
     border_size = 20
 
     # - Text prompts defined before game start
     shoot_to_start = font.render("Shoot to start", True, [255, 255, 255])
-    game_over = font.render("GAME OVER", True, [255, 0, 0])
+    game_over = font.render("GAME OVER", True, [255, 255, 255])
 
     # - This is the game loop
     while game.loop == "test environment":
@@ -33,10 +32,12 @@ def test_loop(game):
 
         # - Initial checks
         if enemy.dead:
-            player.score += enemy.points
             if total_enemies > 0:
+                player.score += enemy.points
                 enemy = Enemy(game)
-            else:
+            elif total_enemies == 0 and game.state == "play":
+                player.score += enemy.points
+                player.score -= int(game.timer)
                 game.state = "post-game"
 
             total_enemies -= 1
@@ -61,8 +62,9 @@ def test_loop(game):
             game.update_timer()
 
             ammo = font.render("Ammo: " + str(player.rounds), True, [0, 0, 0])
-            score_graphic = font.render("Score: " + str(player.score), True, [0, 0, 0])
-            timer_graphic = font.render("Time: " + str(game.timer), True, [0, 0, 0])
+            timer_graphic = font.render("Time: " + str(int(game.timer)), True, [0, 0, 0])
+
+        score_graphic = font.render("Score: " + str(player.score), True, [0, 0, 0])
 
 
 
@@ -79,6 +81,7 @@ def test_loop(game):
             game.surface.blit(score_graphic, [border_size + 10, border_size + 50])
         else:
             game.surface.blit(game_over, [border_size + 10, border_size + 10])
+            game.surface.blit(score_graphic, [border_size + 10, border_size + 30])
 
         pygame.draw.rect(game.surface, [255, 255, 255], [0, 0, game.width, border_size])
         pygame.draw.rect(game.surface, [255, 255, 255], [0, 0, border_size, game.height])
